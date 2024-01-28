@@ -46,10 +46,7 @@ class MenuItemsByMenuAPIView(generics.ListAPIView):
     serializer_class = MenuItemSerializer
 
     def get_queryset(self):
-        """
-        This view returns a list of all the menu items
-        for the menu as determined by the menu_id portion of the URL.
-        """
+
         menu_id = self.kwargs.get('id')
         if not Menu.objects.filter(id=menu_id).exists():
             raise NotFound(f"Menu with id {menu_id} not found.")
