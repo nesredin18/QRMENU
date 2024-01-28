@@ -10,6 +10,14 @@ def generate_qr_code(url, filename):
         box_size=10,
         border=4,
     )
+
+
+
+            
+
+
+
+
     qr.add_data(url)
     qr.make(fit=True)
 
