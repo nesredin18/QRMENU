@@ -29,7 +29,7 @@ def generate_qr_code_for_restaurant(restaurant_id):
     return img_path
 
 class RestaurantListCreateAPIView(generics.ListCreateAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes=[]
 
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
@@ -87,6 +87,7 @@ class ListRestaurantsAPIView(generics.ListAPIView):
 
 
 class RetrieveRestaurantAPIView(generics.RetrieveAPIView):
+    authentication_classes=[]
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
 

@@ -14,6 +14,8 @@ from django.apps import apps
 from helpers.models import CommenModel
 from django.contrib.auth.models import (AbstractBaseUser, PermissionsMixin,UserManager)
 
+from restorant.models import Restaurant
+
 
 # Create your models here.
 
@@ -90,6 +92,7 @@ class User(CommenModel,AbstractBaseUser, PermissionsMixin):
             "Unselect this instead of deleting accounts."
         ),
     )
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='users', null=True, blank=True)
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     email_varified = models.BooleanField(
         _("email_varified"),

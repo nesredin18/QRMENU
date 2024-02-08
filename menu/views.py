@@ -8,6 +8,7 @@ from .serializer import MenuItemSerializer
 from rest_framework.exceptions import NotFound
 
 class MenuListCreateAPIView(generics.ListCreateAPIView):
+    authentication_classes=[]
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
 
@@ -16,6 +17,7 @@ class MenuRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MenuSerializer
 
 class MenuItemListCreateAPIView(generics.ListCreateAPIView):
+    authentication_classes=[]
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
 
@@ -33,6 +35,7 @@ class MenuItemImageRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAP
 
 class MenusByRestaurantAPIView(generics.ListAPIView):
     serializer_class = MenuSerializer
+    authentication_classes=[]
 
     def get_queryset(self):
 

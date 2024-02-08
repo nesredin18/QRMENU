@@ -3,7 +3,7 @@ from .models import Menu
 from .models import MenuItem, MenuItemImage
 
 class MenuSerializer(serializers.ModelSerializer):
-    restaurant_id = serializers.IntegerField(write_only=True)
+    restaurant_id = serializers.IntegerField()
     class Meta:
         model = Menu
         fields = ['id', 'restaurant', 'title', 'description', 'is_active', 'restaurant_id']
