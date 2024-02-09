@@ -13,6 +13,8 @@ class MenuListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = MenuSerializer
 
 class MenuRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes=[]
+
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
 
@@ -22,18 +24,22 @@ class MenuItemListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = MenuItemSerializer
 
 class MenuItemRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes=[]
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
 
 class MenuItemImageListCreateAPIView(generics.ListCreateAPIView):
+    authentication_classes=[]
     queryset = MenuItemImage.objects.all()
     serializer_class = MenuItemImageSerializer
 
 class MenuItemImageRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes=[]
     queryset = MenuItemImage.objects.all()
     serializer_class = MenuItemImageSerializer
 
 class MenusByRestaurantAPIView(generics.ListAPIView):
+    authentication_classes=[]
     serializer_class = MenuSerializer
     authentication_classes=[]
 
@@ -46,6 +52,7 @@ class MenusByRestaurantAPIView(generics.ListAPIView):
         return Menu.objects.filter(restaurant_id=restaurant_id)
 
 class MenuItemsByMenuAPIView(generics.ListAPIView):
+    authentication_classes=[]
     serializer_class = MenuItemSerializer
 
     def get_queryset(self):
@@ -57,6 +64,7 @@ class MenuItemsByMenuAPIView(generics.ListAPIView):
         return MenuItem.objects.filter(menu_id=menu_id)
 
 class MenuItemImagesByMenuItemAPIView(generics.ListAPIView):
+    authentication_classes=[]
     serializer_class = MenuItemImageSerializer
 
     def get_queryset(self):

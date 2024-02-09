@@ -22,7 +22,7 @@ class Restaurant(CommenModel):
     address = models.TextField(blank=True)
     contact_info = models.CharField(max_length=100, blank=True)
     logo_url = models.ImageField(upload_to=restaurant_image_directory_path,blank=True)
-    qr_code = models.ImageField(upload_to='restaurant_qr_codes/', blank=True)
+    qr_code = models.ImageField(upload_to=restaurant_image_directory_path, blank=True)
     url = models.URLField(max_length=200, blank=True)
 
     def save(self, *args, **kwargs):
@@ -33,7 +33,7 @@ class Restaurant(CommenModel):
             super().save(*args, **kwargs)  # Save first to get an ID
 
             # Update URL
-            self.url = f"{settings.SITE_URL}/restaurants/{self.pk}/menus/"
+            self.url = f"{settings.SITE_URL}/restaurants/{self.name}/menus/"
             
             # Generate QR code
             qr = qrcode.QRCode(
@@ -56,7 +56,7 @@ class Restaurant(CommenModel):
             buffer.seek(0)
 
             # Save image to qr_code field
-            self.qr_code.save(f"restaurant_{self.pk}_qr.png", File(buffer), save=False)
+            self.qr_code.save(f"restaurant_{self.name}_qr.png", File(buffer), save=False)
 
         if not is_new:
             super().save(*args, **kwargs)

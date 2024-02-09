@@ -29,37 +29,27 @@ def generate_qr_code_for_restaurant(restaurant_id):
     return img_path
 
 class RestaurantListCreateAPIView(generics.ListCreateAPIView):
-    authentication_classes=[]
 
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
 
-
-
-class RestaurantRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+class UpdateRestaurantQRCodeAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
 
-class UpdateRestaurantQRCodeAPIView(generics.UpdateAPIView):
-    queryset = Restaurant.objects.all()
-    serializer_class = RestaurantSerializer
-
-class UpdateRestaurantQRCodeAPIView(generics.UpdateAPIView):
-    queryset = Restaurant.objects.all()
-    serializer_class = RestaurantSerializer
-
-class UpdateRestaurantQRCodeAPIView(generics.UpdateAPIView):
-    queryset = Restaurant.objects.all()
-    serializer_class = RestaurantSerializer
 
     def update(self, request, *args, **kwargs):
         restaurant = self.get_object()
         url = request.data.get('url')
+        partial = kwargs.pop('partial', False)
+        serializer = self.get_serializer(restaurant, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
 
         if url:
             restaurant.url = url
-            filename = f"restaurant_{restaurant.pk}_qr.png"
+            filename = f"restaurant_{restaurant.name}_qr.png"
+            path= f"restaurant_{restaurant.name}"
 
             # Generate a new QR code
             qr_code_file = generate_qr_code(url, filename)
@@ -69,25 +59,17 @@ class UpdateRestaurantQRCodeAPIView(generics.UpdateAPIView):
                 restaurant.qr_code.delete(save=False)
 
             # Manually set the file path and save it
-            file_path = os.path.join(settings.MEDIA_ROOT, 'restaurant_qr_codes', filename)
+            file_path = os.path.join(settings.MEDIA_ROOT, path, filename)
             with open(file_path, 'wb') as file:
                 file.write(qr_code_file.read())
 
             # Update the FileField path
-            restaurant.qr_code.name = os.path.join('restaurant_qr_codes', filename)
+            restaurant.qr_code.name = os.path.join(path, filename)
             restaurant.save()
             
             return Response({'message': 'QR Code updated successfully'}, status=status.HTTP_200_OK)
 
         return Response({'message': 'URL is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-class ListRestaurantsAPIView(generics.ListAPIView):
-    queryset = Restaurant.objects.all()
-    serializer_class = RestaurantSerializer
 
-
-class RetrieveRestaurantAPIView(generics.RetrieveAPIView):
-    authentication_classes=[]
-    queryset = Restaurant.objects.all()
-    serializer_class = RestaurantSerializer
 
