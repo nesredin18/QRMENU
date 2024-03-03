@@ -2,7 +2,7 @@ from rest_framework import generics
 
 from restorant.models import Restaurant
 from .models import Menu, MenuItemImage
-from .serializer import MenuItemImageSerializer, MenuSerializer
+from .serializer import MenuItemImageSerializer, MenuSerializer, RestaurantMenuItemSerializer
 from .models import MenuItem
 from .serializer import MenuItemSerializer
 from rest_framework.exceptions import NotFound
@@ -77,3 +77,14 @@ class MenuItemImagesByMenuItemAPIView(generics.ListAPIView):
             raise NotFound(f"MenuItem with id {menu_item_id} not found.")
         
         return MenuItemImage.objects.filter(menu_item_id=menu_item_id)
+
+class MenuItemsByRestaurantAPIView(generics.ListAPIView):
+    authentication_classes = []
+    serializer_class = RestaurantMenuItemSerializer  
+
+    def get_queryset(self):
+        restaurant_id = self.kwargs.get('id')
+        if not Restaurant.objects.filter(id=restaurant_id).exists():
+            raise NotFound(f"Restaurant with id {restaurant_id} not found.")
+
+        return MenuItem.objects.filter(menu__restaurant_id=restaurant_id)

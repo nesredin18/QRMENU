@@ -56,6 +56,10 @@ class MyUserManager(UserManager):
             raise ValueError("Superuser must have is_superuser=True.")
 
         return self._create_user(username, email, password, **extra_fields)
+    
+    def change_password(self, user, new_password):
+        user.set_password(new_password)
+        user.save()
 
     
 class User(CommenModel,AbstractBaseUser, PermissionsMixin):
