@@ -126,3 +126,21 @@ class ChangePasswordAPIView(APIView):
         user_manager.change_password(user, new_password)
 
         return Response({'detail': 'Password changed successfully.'}, status=status.HTTP_200_OK)
+
+class UpdateMobileAPIView(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def update(self, request, *args, **kwargs):
+        user_id = self.kwargs.get('pk')
+        instance = self.get_object()
+
+        # Check if the user making the request is updating their own mobile number or is an admin
+        if instance.id == request.user.id or request.user.is_staff:
+            serializer = self.get_serializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response({'detail': 'You do not have permission to perform this action.'}, status=status.HTTP_403_FORBIDDEN)

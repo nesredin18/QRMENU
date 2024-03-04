@@ -10,6 +10,6 @@ urlpatterns=[
     path('restaurantadmins/', views.NonSuperuserListAPIView.as_view(), name='non-superusers-list'),
     path('activate-deactivate/<int:user_id>/', views.UserActivationDeactivationAPIView.as_view(), name='activate-deactivate-user'),
     path('change-password/', views.ChangePasswordAPIView.as_view(), name='change-password'),
-
+    path('update-mobile/<int:pk>/', views.UpdateMobileAPIView.as_view(), name='update-mobile'),
 
 ]
