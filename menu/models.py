@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from helpers.models import CommenModel
 from django.utils.text import slugify
@@ -6,11 +7,16 @@ import os
 from restorant.models import Restaurant
 
 def menu_item_image_directory_path(instance, filename):
-    # file will be uploaded to MEDIA_ROOT/restaurant_<restaurant_name>/menuitem_<menu_item_name>/<filename>
+    # Generate a unique name for each image using UUID
+    unique_name = f'{uuid.uuid4().hex[:10]}_{filename}'
+    
+    # file will be uploaded to MEDIA_ROOT/restaurant_<restaurant_name>/menuitem_<menu_item_name>/unique_name
     restaurant_name = slugify(instance.menu_item.menu.restaurant.name)
-    menu_name=slugify(instance.menu_item.menu.title)
+    menu_name = slugify(instance.menu_item.menu.title)
     menu_item_name = slugify(instance.menu_item.name)
-    return f'restaurant_{restaurant_name}/menu_{menu_name}/menuitem_{menu_item_name}/{filename}'
+    
+    # Construct the path starting from 'media/'
+    return f'media/restaurant_{restaurant_name}/menu_{menu_name}/menuitem_{menu_item_name}/{unique_name}'
 
 # Create your models here.
 class Menu(CommenModel):
@@ -39,4 +45,5 @@ class MenuItemImage(CommenModel):
     description = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
-        return self.image_url
+        # Use the name or any other attribute of the ImageFieldFile
+        return str(self.image_url.name)

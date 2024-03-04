@@ -129,7 +129,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # ... other settings ...
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join('media')
 
 # SITE_URL setting for QR code generation
 SITE_URL = 'http://your-domain.com'  # Replace with your actual domain
