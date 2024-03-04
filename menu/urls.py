@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import MenuItemImageListCreateAPIView, MenuItemImageRetrieveUpdateDestroyAPIView, MenuItemImagesByMenuItemAPIView, MenuItemsByMenuAPIView, MenuListCreateAPIView, MenuRetrieveUpdateDestroyAPIView, MenusByRestaurantAPIView
-from .views import MenuItemListCreateAPIView, MenuItemRetrieveUpdateDestroyAPIView, MenuItemsByRestaurantAPIView, restaurant_menu_and_items
+from .views import MenuItemListCreateAPIView, MenuItemRetrieveUpdateDestroyAPIView, MenuItemsByRestaurantAPIView, restaurant_menu_and_items, CustomUpdateMenuItemAPIView, UpdateMenuAPIView
 
 
 urlpatterns = [
@@ -15,6 +15,8 @@ urlpatterns = [
     path('menu-items/<int:id>/images/', MenuItemImagesByMenuItemAPIView.as_view(), name='menu-item-images-by-menu-item'),
     path('restaurants/<int:id>/menu-items/', MenuItemsByRestaurantAPIView.as_view(), name='menu-items-by-restaurant'),
     path('restaurants/<int:restaurant_id>/menulist/', restaurant_menu_and_items, name='restaurant-menu-and-items'),
+    path('menu-items/<int:pk>/update/', CustomUpdateMenuItemAPIView.as_view(), name='update-menu-item'),
+    path('menus/<int:pk>/update/', UpdateMenuAPIView.as_view(), name='update-menu'),
 ]
 
 

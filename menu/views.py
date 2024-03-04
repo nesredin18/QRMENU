@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from restorant.models import Restaurant
 from .models import Menu, MenuItemImage
-from .serializer import MenuItemImageSerializer, MenuSerializer, RestaurantMenuItemSerializer
+from .serializer import MenuItemImageSerializer, MenuSerializer, RestaurantMenuItemSerializer, MenuItemUpdateSerializer, MenuUpdateSerializer
 from .models import MenuItem
 from .serializer import MenuItemSerializer
 from rest_framework.exceptions import NotFound
@@ -92,6 +92,40 @@ class MenuItemsByRestaurantAPIView(generics.ListAPIView):
             raise NotFound(f"Restaurant with id {restaurant_id} not found.")
 
         return MenuItem.objects.filter(menu__restaurant_id=restaurant_id)
+    
+class UpdateMenuAPIView(generics.UpdateAPIView):
+    queryset = Menu.objects.all()
+    serializer_class = MenuUpdateSerializer
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+
+        # Check if serializer is valid before updating
+        serializer.is_valid(raise_exception=True)
+
+        # Perform the update using the custom serializer
+        serializer.save()
+
+        return Response(serializer.data)
+
+class CustomUpdateMenuItemAPIView(generics.UpdateAPIView):
+    queryset = MenuItem.objects.all()
+    serializer_class = MenuItemUpdateSerializer
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+
+        # Check if serializer is valid before updating
+        serializer.is_valid(raise_exception=True)
+
+        # Perform the update using the custom serializer
+        serializer.save()
+
+        return Response(serializer.data)
     
 @api_view(['GET', 'POST'])
 def menu_item_image_list_create_view(request):
